@@ -48,3 +48,35 @@ while True:
 ```
 First, draw a triangle(it will be a wing). Then, translate it to our center of rotation, (380, 330) and rotate it amount of degree value. Since it rotates based on the base of triangle, move it up to the height so that it can rotate based on the vertex.
 Second wing should be the same as first wing but have angle difference as much as 90 degrees. To do that, translate the triangle back to the height and rotate 90 degrees, and translate it to the amount of its height.
+
+# Clock
+```python
+def degrees_to_pos(R, theta):
+    y = np.cos(2 * np.pi * theta / 360) * R
+    x = np.sin(2 * np.pi * theta / 360) * R
+    return x + 400 - 15 , -(y - 400) - 15
+```
+This is the function for converting degrees to position coordinate. It gets radius and theta value and calculate x, y position.
+To make it locate based on the center of window, + 400(= window width / 2) to x coordinate and - 400(= window height / 2) to y coordinate. -15 is to correct the result that is slightly skewed from the center.
+```python
+current_time = datetime.datetime.now()
+s = current_time.second
+m = current_time.minute
+h = current_time.hour
+
+# second hand
+R = 300
+theta = s * (360 / 60)
+pygame.draw.line(screen, RED, (400, 400), degrees_to_pos(R, theta), 8)
+
+# minute hand
+R = 350
+theta = (m + s / 60) * (360 / 60)
+pygame.draw.line(screen, BLACK, (400, 400), degrees_to_pos(R, theta), 8)
+
+# hour hand
+R = 210
+theta = (h + m / 60) * (360 / 12)
+pygame.draw.line(screen, BLACK, (400, 400), degrees_to_pos(R, theta), 8)
+```
+The hour hand is drawn to a length of 210, the minute hand to a length of 350, and the second hand to a length of 300. Calculating the degree of second hand is simple. It takes 60 seconds to turn 360 degrees, so divide 360 by 60 and multiply the current seconds. The minute hand is similar but it have to be influenced by seconds. So, add the amount of seconds devided by 60. The hour hand is the same as above.
